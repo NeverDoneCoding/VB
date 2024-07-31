@@ -9,24 +9,26 @@ Sub CompareAndHighlightRows()
     Dim targetCell As Range
     Dim sourceFilePath As String
     Dim targetFilePath As String
+    Dim sourceSheetName As String
+    Dim targetSheetName As String
     Dim compareColumn As String
     Dim sourceLastRow As Long
     Dim targetLastRow As Long
     Dim sourceRow As Range
     Dim targetRow As Range
     
-    ' Set the file paths of the source and target workbooks
-    sourceFilePath = "C:\path\to\source\workbook.xlsx"
-    targetFilePath = "C:\path\to\target\workbook.xlsx"
-    
-    ' Set the column you want to compare (e.g., "A")
-    compareColumn = "A"
+    ' Define variables
+    sourceFilePath = "C:\path\to\source\workbook.xlsx"  ' Change to your source workbook path
+    targetFilePath = "C:\path\to\target\workbook.xlsx"  ' Change to your target workbook path
+    sourceSheetName = "SourceSheet"                     ' Change to your source sheet name
+    targetSheetName = "TargetSheet"                     ' Change to your target sheet name
+    compareColumn = "A"                                ' Change to your compare column letter
     
     ' Open the source and target workbooks
     Set sourceWorkbook = Workbooks.Open(sourceFilePath)
     Set targetWorkbook = Workbooks.Open(targetFilePath)
-    Set sourceSheet = sourceWorkbook.Sheets("Sheet1") ' Change to your source sheet name
-    Set targetSheet = targetWorkbook.Sheets("Sheet1") ' Change to your target sheet name
+    Set sourceSheet = sourceWorkbook.Sheets(sourceSheetName)
+    Set targetSheet = targetWorkbook.Sheets(targetSheetName)
     
     ' Find the last row with data in the source and target sheets
     sourceLastRow = sourceSheet.Cells(sourceSheet.Rows.Count, compareColumn).End(xlUp).Row
