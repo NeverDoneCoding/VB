@@ -1,4 +1,4 @@
-Sub CompareAndHighlightRows()
+Sub CompareAndHighlightCells()
     Dim sourceWorkbook As Workbook
     Dim targetWorkbook As Workbook
     Dim sourceSheet As Worksheet
@@ -11,55 +11,53 @@ Sub CompareAndHighlightRows()
     Dim targetFilePath As String
     Dim sourceSheetName As String
     Dim targetSheetName As String
-    Dim compareColumn As String
+    Dim sourceColumn As String
+    Dim targetColumn As String
     Dim sourceLastRow As Long
     Dim targetLastRow As Long
     Dim sourceRow As Range
     Dim targetRow As Range
-    
-    ' Define variables
-    sourceFilePath = "C:\path\to\source\workbook.xlsx"  ' Change to your source workbook path
-    targetFilePath = "C:\path\to\target\workbook.xlsx"  ' Change to your target workbook path
-    sourceSheetName = "SourceSheet"                     ' Change to your source sheet name
-    targetSheetName = "TargetSheet"                     ' Change to your target sheet name
-    compareColumn = "A"                                ' Change to your compare column letter
-    
+
+    ' Define variables for file paths and sheet names
+    sourceFilePath = "C:\path\to\source\workbook.xlsx" ' Path to source workbook with rules list
+    targetFilePath = "C:\path\to\target\workbook.xlsx" ' Path to target workbook to be checked
+    sourceSheetName = "SourceSheet"                   ' Sheet in source workbook containing rules
+    targetSheetName = "TargetSheet"                   ' Sheet in target workbook to be checked
+    sourceColumn = "A"                                ' Column in source sheet containing rules
+    targetColumn = "A"                                ' Column in target sheet to compare against
+
     ' Open the source and target workbooks
     Set sourceWorkbook = Workbooks.Open(sourceFilePath)
     Set targetWorkbook = Workbooks.Open(targetFilePath)
     Set sourceSheet = sourceWorkbook.Sheets(sourceSheetName)
     Set targetSheet = targetWorkbook.Sheets(targetSheetName)
-    
-    ' Find the last row with data in the source and target sheets
-    sourceLastRow = sourceSheet.Cells(sourceSheet.Rows.Count, compareColumn).End(xlUp).Row
-    targetLastRow = targetSheet.Cells(targetSheet.Rows.Count, compareColumn).End(xlUp).Row
-    
+
+    ' Find the last row with data in the source and target columns
+    sourceLastRow = sourceSheet.Cells(sourceSheet.Rows.Count, sourceColumn).End(xlUp).Row
+    targetLastRow = targetSheet.Cells(targetSheet.Rows.Count, targetColumn).End(xlUp).Row
+
     ' Set the ranges to compare
-    Set sourceRange = sourceSheet.Range(compareColumn & "2:" & compareColumn & sourceLastRow)
-    Set targetRange = targetSheet.Range(compareColumn & "2:" & compareColumn & targetLastRow)
-    
-    ' Loop through each row in the target range
-    For Each targetRow In targetRange.Rows
-        Set targetCell = targetRow.Cells(1, 1) ' Assuming the comparison is in the first column
-        
-        ' Check if the target cell value exists in the source range
-        For Each sourceRow In sourceRange.Rows
-            Set sourceCell = sourceRow.Cells(1, 1) ' Assuming the comparison is in the first column
-            
+    Set sourceRange = sourceSheet.Range(sourceColumn & "1:" & sourceColumn & sourceLastRow)
+    Set targetRange = targetSheet.Range(targetColumn & "1:" & targetColumn & targetLastRow)
+
+    ' Loop through each cell in the target range
+    For Each targetCell In targetRange
+        ' Loop through each cell in the source range
+        For Each sourceCell In sourceRange
+            ' If the cell values match, highlight the target cell in green
             If targetCell.Value = sourceCell.Value Then
-                ' Highlight the entire row in the target sheet
-                targetRow.Interior.Color = RGB(255, 255, 0) ' Yellow color
-                Exit For
+                targetCell.Interior.Color = RGB(144, 238, 144) ' Light green color
+                Exit For ' Stop checking once a match is found
             End If
-        Next sourceRow
-    Next targetRow
-    
+        Next sourceCell
+    Next targetCell
+
     ' Close the source workbook without saving
     sourceWorkbook.Close False
-    
+
     ' Save and close the target workbook
     targetWorkbook.Save
     targetWorkbook.Close
-    
+
     MsgBox "Comparison and highlighting complete."
 End Sub
