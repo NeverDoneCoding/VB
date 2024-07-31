@@ -1,0 +1,45 @@
+Sub PullDataBasedOnTextMatch()
+    Dim sourceWorkbook As Workbook
+    Dim targetWorkbook As Workbook
+    Dim sourceSheet As Worksheet
+    Dim targetSheet As Worksheet
+    Dim cell As Range
+    Dim lastRow As Long
+    Dim sourceFilePath As String
+    Dim textToMatch As String
+    Dim targetRow As Long
+    
+    ' Set the file path of the source workbook
+    sourceFilePath = "C:\path\to\source\workbook.xlsx"
+    
+    ' Set the target workbook and worksheet
+    Set targetWorkbook = ThisWorkbook
+    Set targetSheet = targetWorkbook.Sheets("Sheet1") ' Change to your target sheet name
+    
+    ' Set the text you want to match
+    textToMatch = "specific text" ' Change this to the text you want to match
+    
+    ' Open the source workbook
+    Set sourceWorkbook = Workbooks.Open(sourceFilePath)
+    Set sourceSheet = sourceWorkbook.Sheets("Sheet1") ' Change to your source sheet name
+    
+    ' Find the last row with data in the source sheet
+    lastRow = sourceSheet.Cells(sourceSheet.Rows.Count, "A").End(xlUp).Row
+    
+    ' Initialize the target row
+    targetRow = 1
+    
+    ' Loop through each row in the source sheet
+    For Each cell In sourceSheet.Range("A2:A" & lastRow) ' Assuming column A contains the text to match
+        If InStr(1, cell.Value, textToMatch, vbTextCompare) > 0 Then
+            ' Copy the entire row to the target sheet
+            cell.EntireRow.Copy targetSheet.Rows(targetRow)
+            targetRow = targetRow + 1
+        End If
+    Next cell
+    
+    ' Close the source workbook without saving
+    sourceWorkbook.Close False
+    
+    MsgBox "Data transfer complete."
+End Sub
