@@ -8,8 +8,8 @@ Sub ProcessData()
     Dim ruleRoleCell As Range
     Dim headerRange As Range
 
-    ' Set the worksheet (change "Sheet1" to your actual sheet name if necessary)
-    Set ws = ThisWorkbook.Sheets("Sheet1")
+    ' Set the worksheet to "policy-rule-compliance"
+    Set ws = ThisWorkbook.Sheets("policy-rule-compliance")
 
     ' Step 1: Delete columns A, B, C, D, and the column with the title "Rule role"
     ws.Columns("A:D").Delete
