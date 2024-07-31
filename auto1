@@ -6,6 +6,7 @@ Sub ProcessData()
     Dim compAverage As Double
     Dim foundCell As Range
     Dim ruleRoleCell As Range
+    Dim headerRange As Range
 
     ' Set the worksheet (change "Sheet1" to your actual sheet name if necessary)
     Set ws = ThisWorkbook.Sheets("Sheet1")
@@ -46,6 +47,14 @@ Sub ProcessData()
         
         ' Output the average to cell F4
         ws.Range("F4").Value = compAverage
+
+        ' Step 4: Write "Average" in cell F3 and "Instances" in cell G3
+        ws.Range("F3").Value = "Average"
+        ws.Range("G3").Value = "Instances"
+
+        ' Step 5: Add filters to all headers in the first row
+        Set headerRange = ws.Rows(1)
+        headerRange.AutoFilter
     Else
         MsgBox "The 'Compliance' column was not found.", vbExclamation
     End If
