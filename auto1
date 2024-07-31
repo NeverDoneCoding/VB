@@ -1,0 +1,45 @@
+Sub ProcessData()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim compColumn As Range
+    Dim compAverage As Double
+    Dim foundCell As Range
+
+    ' Set the worksheet (change "Sheet1" to your actual sheet name if necessary)
+    Set ws = ThisWorkbook.Sheets("Sheet1")
+
+    ' Step 1: Delete columns A, B, C, D, and I
+    ws.Columns("A:D").Delete
+    ws.Columns("I:I").Delete
+
+    ' Find the column with the header "Compliance"
+    Set foundCell = ws.Rows(1).Find(What:="Compliance", LookIn:=xlValues, LookAt:=xlWhole)
+    
+    If Not foundCell Is Nothing Then
+        ' Step 2: Process rows in column A
+        lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+        For i = 2 To lastRow ' Assuming headers are in the first row
+            If ws.Cells(i, "A").Value Like "*19.1*" Or _
+               ws.Cells(i, "A").Value Like "*19.2*" Or _
+               ws.Cells(i, "A").Value Like "*19.3*" Or _
+               ws.Cells(i, "A").Value Like "*19.4*" Or _
+               ws.Cells(i, "A").Value Like "*19.5*" Or _
+               ws.Cells(i, "A").Value Like "*19.6*" Or _
+               ws.Cells(i, "A").Value Like "*19.7*" Or _
+               ws.Cells(i, "A").Value Like "*19.8*" Or _
+               ws.Cells(i, "A").Value Like "*19.9*" Then
+                ws.Cells(i, foundCell.Column).Value = 100
+            End If
+        Next i
+
+        ' Step 3: Calculate the average of the "Compliance" column
+        Set compColumn = ws.Columns(foundCell.Column)
+        compAverage = Application.WorksheetFunction.Average(compColumn.Offset(1, 0).Resize(compColumn.Rows.Count - 1, 1))
+        
+        ' Output the average to cell F4
+        ws.Range("F4").Value = compAverage
+    Else
+        MsgBox "The 'Compliance' column was not found.", vbExclamation
+    End If
+End Sub
