@@ -1,4 +1,4 @@
-Sub CompareAndHighlightCells()
+Sub CompareAndBoldMatchingCells()
     Dim sourceWorkbook As Workbook
     Dim targetWorkbook As Workbook
     Dim sourceSheet As Worksheet
@@ -44,9 +44,9 @@ Sub CompareAndHighlightCells()
     For Each targetCell In targetRange
         ' Loop through each cell in the source range
         For Each sourceCell In sourceRange
-            ' If the cell values match, highlight the target cell in green
+            ' If the cell values match, make the text in the target cell bold
             If targetCell.Value = sourceCell.Value Then
-                targetCell.Interior.Color = RGB(144, 238, 144) ' Light green color
+                targetCell.Font.Bold = True
                 Exit For ' Stop checking once a match is found
             End If
         Next sourceCell
@@ -59,5 +59,5 @@ Sub CompareAndHighlightCells()
     targetWorkbook.Save
     targetWorkbook.Close
 
-    MsgBox "Comparison and highlighting complete."
+    MsgBox "Comparison complete. Matching cells have been bolded."
 End Sub
