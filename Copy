@@ -34,9 +34,19 @@ Sub CompareAndListMatchingRows()
     Set sourceRange = sourceSheet.Range(sourceRangeAddress)
     Set targetRange = targetSheet.Range(targetRangeAddress)
     
-    ' Add a new sheet for output
-    Set outputSheet = targetWorkbook.Sheets.Add
-    outputSheet.Name = "MatchingRows"
+    ' Check if the output sheet exists, if not, add it
+    On Error Resume Next
+    Set outputSheet = targetWorkbook.Sheets("MatchingRows")
+    On Error GoTo 0
+    If outputSheet Is Nothing Then
+        Set outputSheet = targetWorkbook.Sheets.Add
+        outputSheet.Name = "MatchingRows"
+    End If
+    
+    ' Clear any previous data in the output sheet
+    outputSheet.Cells.Clear
+    
+    ' Set the starting row for output
     outputRow = 1
     
     ' Header for the output sheet
