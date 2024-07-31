@@ -5,13 +5,19 @@ Sub ProcessData()
     Dim compColumn As Range
     Dim compAverage As Double
     Dim foundCell As Range
+    Dim ruleRoleCell As Range
 
     ' Set the worksheet (change "Sheet1" to your actual sheet name if necessary)
     Set ws = ThisWorkbook.Sheets("Sheet1")
 
-    ' Step 1: Delete columns A, B, C, D, and I
+    ' Step 1: Delete columns A, B, C, D, and the column with the title "Rule role"
     ws.Columns("A:D").Delete
-    ws.Columns("I:I").Delete
+
+    ' Find the column with the title "Rule role" and delete it
+    Set ruleRoleCell = ws.Rows(1).Find(What:="Rule role", LookIn:=xlValues, LookAt:=xlWhole)
+    If Not ruleRoleCell Is Nothing Then
+        ws.Columns(ruleRoleCell.Column).Delete
+    End If
 
     ' Find the column with the header "Compliance"
     Set foundCell = ws.Rows(1).Find(What:="Compliance", LookIn:=xlValues, LookAt:=xlWhole)
@@ -33,9 +39,10 @@ Sub ProcessData()
             End If
         Next i
 
-        ' Step 3: Calculate the average of the "Compliance" column
-        Set compColumn = ws.Columns(foundCell.Column)
-        compAverage = Application.WorksheetFunction.Average(compColumn.Offset(1, 0).Resize(compColumn.Rows.Count - 1, 1))
+        ' Step 3: Calculate the average of the "Compliance" column, excluding the first row
+        lastRow = ws.Cells(ws.Rows.Count, foundCell.Column).End(xlUp).Row
+        Set compColumn = ws.Range(ws.Cells(2, foundCell.Column), ws.Cells(lastRow, foundCell.Column))
+        compAverage = Application.WorksheetFunction.Average(compColumn)
         
         ' Output the average to cell F4
         ws.Range("F4").Value = compAverage
