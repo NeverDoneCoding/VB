@@ -1,0 +1,45 @@
+Sub HighlightMatchingCellsInSameSheet()
+    Dim ws As Worksheet
+    Dim sourceRange As Range
+    Dim targetRange As Range
+    Dim sourceCell As Range
+    Dim targetCell As Range
+    Dim sourceColumn As String
+    Dim targetColumn As String
+    Dim sourceLastRow As Long
+    Dim targetLastRow As Long
+    Dim first15Source As String
+    Dim first15Target As String
+    
+    ' Define variables
+    Set ws = ThisWorkbook.Sheets("Sheet1") ' Change to your sheet name
+    sourceColumn = "A"                    ' Change to your source column letter
+    targetColumn = "B"                    ' Change to your target column letter
+    
+    ' Find the last row with data in the source and target columns
+    sourceLastRow = ws.Cells(ws.Rows.Count, sourceColumn).End(xlUp).Row
+    targetLastRow = ws.Cells(ws.Rows.Count, targetColumn).End(xlUp).Row
+    
+    ' Set the ranges to compare
+    Set sourceRange = ws.Range(sourceColumn & "2:" & sourceColumn & sourceLastRow)
+    Set targetRange = ws.Range(targetColumn & "2:" & targetColumn & targetLastRow)
+    
+    ' Loop through each cell in the target range
+    For Each targetCell In targetRange
+        first15Target = Left(targetCell.Value, 15)
+        
+        ' Loop through each cell in the source range
+        For Each sourceCell In sourceRange
+            first15Source = Left(sourceCell.Value, 15)
+            
+            ' Check if the first 15 characters match
+            If StrComp(first15Target, first15Source, vbTextCompare) = 0 Then
+                ' Highlight the target cell in blue
+                targetCell.Interior.Color = RGB(0, 0, 255) ' Blue color
+                Exit For
+            End If
+        Next sourceCell
+    Next targetCell
+    
+    MsgBox "Matching complete. Highlighting done in the target column."
+End Sub
