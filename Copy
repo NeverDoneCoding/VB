@@ -1,4 +1,4 @@
-Sub CompareAndHighlightRules()
+Sub CompareAndListMatchingRows()
     Dim sourceWorkbook As Workbook
     Dim targetWorkbook As Workbook
     Dim sourceSheet As Worksheet
@@ -13,6 +13,8 @@ Sub CompareAndHighlightRules()
     Dim targetSheetName As String
     Dim sourceRangeAddress As String
     Dim targetRangeAddress As String
+    Dim outputSheet As Worksheet
+    Dim outputRow As Long
     
     ' Define variables
     sourceFilePath = "C:\path\to\source\workbook.xlsx"  ' Change to your source workbook path
@@ -32,14 +34,26 @@ Sub CompareAndHighlightRules()
     Set sourceRange = sourceSheet.Range(sourceRangeAddress)
     Set targetRange = targetSheet.Range(targetRangeAddress)
     
+    ' Add a new sheet for output
+    Set outputSheet = targetWorkbook.Sheets.Add
+    outputSheet.Name = "MatchingRows"
+    outputRow = 1
+    
+    ' Header for the output sheet
+    outputSheet.Cells(outputRow, 1).Value = "Target Row"
+    outputSheet.Cells(outputRow, 2).Value = "Matching Source Value"
+    outputRow = outputRow + 1
+    
     ' Loop through each cell in the target range
     For Each targetCell In targetRange
         ' Loop through each cell in the source range
         For Each sourceCell In sourceRange
             ' Check if the values match
             If StrComp(targetCell.Value, sourceCell.Value, vbTextCompare) = 0 Then
-                ' Change the font to bold in the target cell
-                targetCell.Font.Bold = True
+                ' Output the matching row number and value
+                outputSheet.Cells(outputRow, 1).Value = targetCell.Row
+                outputSheet.Cells(outputRow, 2).Value = targetCell.Value
+                outputRow = outputRow + 1
                 Exit For
             End If
         Next sourceCell
@@ -52,5 +66,5 @@ Sub CompareAndHighlightRules()
     targetWorkbook.Save
     targetWorkbook.Close
     
-    MsgBox "Comparison and highlighting complete."
+    MsgBox "Comparison complete. Check the 'MatchingRows' sheet for results."
 End Sub
