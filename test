@@ -33,4 +33,7 @@ Sub CopyColumnsFromExpToRpt()
 
     ' Copy the range from "exp" to "rpt"
     sourceRange.Copy targetRange
+
+    ' AutoFit the columns in the target range (columns A to D)
+    rptWs.Columns("A:D").AutoFit
 End Sub
