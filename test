@@ -10,17 +10,14 @@ Sub CopyColumnsFromExpToRpt()
     Set rptWb = ThisWorkbook
     Set expWb = Nothing
 
-    ' Loop through open workbooks to find "exp"
-    For Each wb In Workbooks
-        If wb.Name Like "*exp*" Then
-            Set expWb = wb
-            Exit For
-        End If
-    Next wb
+    ' Look for the "exp" workbook named "policy-rule-compliance.xlsx"
+    On Error Resume Next
+    Set expWb = Workbooks("policy-rule-compliance.xlsx")
+    On Error GoTo 0
 
     ' Check if the "exp" workbook was found
     If expWb Is Nothing Then
-        MsgBox "The 'exp' workbook is not open.", vbExclamation
+        MsgBox "The 'policy-rule-compliance.xlsx' workbook is not open.", vbExclamation
         Exit Sub
     End If
 
