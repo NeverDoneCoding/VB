@@ -1,4 +1,5 @@
-Sub Find Avg from template data() ' edit 19.1 rules to 100, find avg in paste in cell, put headers to column
+Sub Avgfromtemplate() 
+' edit 19.1 rules to 100, find avg in paste in cell, put headers to column
     Dim ws As Worksheet
     Dim lastRow As Long
     Dim i As Long
