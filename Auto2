@@ -26,7 +26,7 @@ Sub ProcessDataSteps2To5()
                ws.Cells(i, "A").Value Like "*19.7*" Or _
                ws.Cells(i, "A").Value Like "*19.8*" Or _
                ws.Cells(i, "A").Value Like "*19.9*" Then
-                ws.Cells(i, foundCell.Column).Value = 100
+                ws.Cells(i, foundCell.Column).Value = 1
             End If
         Next i
 
@@ -35,8 +35,8 @@ Sub ProcessDataSteps2To5()
         Set compColumn = ws.Range(ws.Cells(2, foundCell.Column), ws.Cells(lastRow, foundCell.Column))
         compAverage = Application.WorksheetFunction.Average(compColumn)
         
-        ' Output the average to cell F4
-        ws.Range("F4").Value = compAverage
+        ' Output the average to cell F4, formatted as a decimal value
+        ws.Range("F4").Value = Format(compAverage, "0.0")
 
         ' Step 4: Write "Average" in cell F3 and "Instances" in cell G3
         ws.Range("F3").Value = "Average"
