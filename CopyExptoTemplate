@@ -1,0 +1,35 @@
+Sub CopyColumnsBetweenWorkbooks()
+    Dim expWb As Workbook
+    Dim rptWb As Workbook
+    Dim expWs As Worksheet
+    Dim rptWs As Worksheet
+    Dim sourceRange As Range
+    Dim targetRange As Range
+    Dim expPath As String
+    Dim rptPath As String
+
+    ' Assign the paths for the workbooks
+    expPath = "C:\Path\To\Your\exp.xlsx" ' Replace with the actual path
+    rptPath = "C:\Path\To\Your\rpt.xlsx" ' Replace with the actual path
+
+    ' Open the source and destination workbooks
+    Set expWb = Workbooks.Open(expPath)
+    Set rptWb = Workbooks.Open(rptPath)
+
+    ' Set the worksheets (assuming only one sheet in each workbook)
+    Set expWs = expWb.Worksheets(1)
+    Set rptWs = rptWb.Worksheets(1)
+
+    ' Define the source range from "exp" workbook (columns E to H)
+    Set sourceRange = expWs.Range("E:H")
+
+    ' Define the target range in "rpt" workbook (columns A to D)
+    Set targetRange = rptWs.Range("A1")
+
+    ' Copy the range from "exp" to "rpt"
+    sourceRange.Copy targetRange
+
+    ' Close the workbooks
+    expWb.Close SaveChanges:=False
+    rptWb.Close SaveChanges:=True
+End Sub
