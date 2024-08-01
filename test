@@ -1,0 +1,39 @@
+Sub CopyColumnsFromExpToRpt()
+    Dim expWb As Workbook
+    Dim rptWb As Workbook
+    Dim expWs As Worksheet
+    Dim rptWs As Worksheet
+    Dim sourceRange As Range
+    Dim targetRange As Range
+
+    ' Set the workbooks
+    Set rptWb = ThisWorkbook
+    Set expWb = Nothing
+
+    ' Loop through open workbooks to find "exp"
+    For Each wb In Workbooks
+        If wb.Name Like "*exp*" Then
+            Set expWb = wb
+            Exit For
+        End If
+    Next wb
+
+    ' Check if the "exp" workbook was found
+    If expWb Is Nothing Then
+        MsgBox "The 'exp' workbook is not open.", vbExclamation
+        Exit Sub
+    End If
+
+    ' Set the worksheets (assuming only one sheet in each workbook)
+    Set expWs = expWb.Worksheets(1)
+    Set rptWs = rptWb.Worksheets(1)
+
+    ' Define the source range from "exp" workbook (columns E to H)
+    Set sourceRange = expWs.Range("E:H")
+
+    ' Define the target range in "rpt" workbook (starting from cell A1)
+    Set targetRange = rptWs.Range("A1")
+
+    ' Copy the range from "exp" to "rpt"
+    sourceRange.Copy targetRange
+End Sub
