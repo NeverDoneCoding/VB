@@ -5,7 +5,6 @@ Sub ProcessDataSteps2To5()
     Dim compColumn As Range
     Dim compAverage As Double
     Dim foundCell As Range
-    Dim headerRange As Range
 
     ' Set the worksheet to the currently active worksheet
     Set ws = ActiveSheet
@@ -35,16 +34,15 @@ Sub ProcessDataSteps2To5()
         Set compColumn = ws.Range(ws.Cells(2, foundCell.Column), ws.Cells(lastRow, foundCell.Column))
         compAverage = Application.WorksheetFunction.Average(compColumn)
         
-        ' Output the average to cell F4, divided by 100 to get 0.x format
-        ws.Range("F4").Value = Format(compAverage / 100)
+        ' Output the average to cell F4, divided by 100 to get 0.xx format
+        ws.Range("F4").Value = Format(compAverage / 100, "0.00")
 
         ' Step 4: Write "Average" in cell F3 and "Instances" in cell G3
         ws.Range("F3").Value = "Average"
         ws.Range("G3").Value = "Instances"
 
         ' Step 5: Add filters to headers in columns A to D only
-        Set headerRange = ws.Range("A1:D1")
-        headerRange.AutoFilter
+        ws.Range("A1:D" & lastRow).AutoFilter
     Else
         MsgBox "The 'Compliance' column was not found.", vbExclamation
     End If
