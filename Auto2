@@ -26,7 +26,7 @@ Sub ProcessDataSteps2To5()
                ws.Cells(i, "A").Value Like "*19.7*" Or _
                ws.Cells(i, "A").Value Like "*19.8*" Or _
                ws.Cells(i, "A").Value Like "*19.9*" Then
-                ws.Cells(i, foundCell.Column).Value = 1
+                ws.Cells(i, foundCell.Column).Value = 100
             End If
         Next i
 
@@ -35,16 +35,18 @@ Sub ProcessDataSteps2To5()
         Set compColumn = ws.Range(ws.Cells(2, foundCell.Column), ws.Cells(lastRow, foundCell.Column))
         compAverage = Application.WorksheetFunction.Average(compColumn)
         
-        ' Output the average to cell F4, formatted as a decimal value
-        ws.Range("F4").Value = Format(compAverage, "0.0")
+        ' Output the average to cell F4, divided by 100 to get 0.x format
+        ws.Range("F4").Value = Format(compAverage / 100, "0.0")
 
         ' Step 4: Write "Average" in cell F3 and "Instances" in cell G3
         ws.Range("F3").Value = "Average"
         ws.Range("G3").Value = "Instances"
 
-        ' Step 5: Add filters to rows which have values in the first row
-        Set headerRange = ws.Rows(1).SpecialCells(xlCellTypeVisible)
-        headerRange.AutoFilter
+        ' Step 5: Add filters to headers in columns A to D only
+        ws.Rows(1).AutoFilter Field:=1 ' Ensure no filters are applied to all columns initially
+        ws.Rows(1).AutoFilter Field:=2
+        ws.Rows(1).AutoFilter Field:=3
+        ws.Rows(1).AutoFilter Field:=4
     Else
         MsgBox "The 'Compliance' column was not found.", vbExclamation
     End If
