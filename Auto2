@@ -36,17 +36,15 @@ Sub ProcessDataSteps2To5()
         compAverage = Application.WorksheetFunction.Average(compColumn)
         
         ' Output the average to cell F4, divided by 100 to get 0.x format
-        ws.Range("F4").Value = Format(compAverage / 100, "0.0")
+        ws.Range("F4").Value = Format(compAverage / 100)
 
         ' Step 4: Write "Average" in cell F3 and "Instances" in cell G3
         ws.Range("F3").Value = "Average"
         ws.Range("G3").Value = "Instances"
 
         ' Step 5: Add filters to headers in columns A to D only
-        ws.Rows(1).AutoFilter Field:=1 ' Ensure no filters are applied to all columns initially
-        ws.Rows(1).AutoFilter Field:=2
-        ws.Rows(1).AutoFilter Field:=3
-        ws.Rows(1).AutoFilter Field:=4
+        Set headerRange = ws.Range("A1:D1")
+        headerRange.AutoFilter
     Else
         MsgBox "The 'Compliance' column was not found.", vbExclamation
     End If
