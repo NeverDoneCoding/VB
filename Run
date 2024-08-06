@@ -6,9 +6,19 @@ Sub Avgfromtemplate()
     Dim compAverage As Double
     Dim foundCell As Range
     Dim cell As Range
+    Dim ruleRoleCell As Range
     
     ' Set the worksheet to the currently active worksheet
     Set ws = ActiveSheet
+    
+    ' Step 1: Delete columns A, B, C, D, and the column with the title "Rule role"
+    ws.Columns("A:D").Delete
+    
+    ' Find the column with the title "Rule role" and delete it
+    Set ruleRoleCell = ws.Rows(1).Find(What:="Rule role", LookIn:=xlValues, LookAt:=xlWhole)
+    If Not ruleRoleCell Is Nothing Then
+        ws.Columns(ruleRoleCell.Column).Delete
+    End If
     
     ' Step 2: Process rows in column A
     lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
