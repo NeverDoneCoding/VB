@@ -1,0 +1,59 @@
+Sub Avgfromtemplate()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim compColumn As Range
+    Dim compAverage As Double
+    Dim foundCell As Range
+    Dim cell As Range
+    
+    ' Set the worksheet to the currently active worksheet
+    Set ws = ActiveSheet
+    
+    ' Step 2: Process rows in column A
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    ' Find the column with the header "Compliance"
+    Set foundCell = ws.Rows(1).Find(What:="Compliance", LookIn:=xlValues, LookAt:=xlWhole)
+    
+    If Not foundCell Is Nothing Then
+        For i = 2 To lastRow ' Assuming headers are in the first row
+            If ws.Cells(i, "A").Value Like "*19.1*" Or _
+               ws.Cells(i, "A").Value Like "*19.2*" Or _
+               ws.Cells(i, "A").Value Like "*19.3*" Or _
+               ws.Cells(i, "A").Value Like "*19.4*" Or _
+               ws.Cells(i, "A").Value Like "*19.5*" Or _
+               ws.Cells(i, "A").Value Like "*19.6*" Or _
+               ws.Cells(i, "A").Value Like "*19.7*" Or _
+               ws.Cells(i, "A").Value Like "*19.8*" Or _
+               ws.Cells(i, "A").Value Like "*19.9*" Then
+                ws.Cells(i, foundCell.Column).Value = 100
+            End If
+        Next i
+
+        ' Step 3: Calculate the average of the "Compliance" column, excluding the first row
+        lastRow = ws.Cells(ws.Rows.Count, foundCell.Column).End(xlUp).Row
+        Set compColumn = ws.Range(ws.Cells(2, foundCell.Column), ws.Cells(lastRow, foundCell.Column))
+        compAverage = Application.WorksheetFunction.Average(compColumn)
+        
+        ' Output the average to cell F4, divided by 100 to get 0.xx format
+        ws.Range("F4").Value = Format(compAverage / 100, "0.00")
+
+        ' Step 4: Write "Average" in cell F3 and "Instances" in cell G3
+        ws.Range("F3").Value = "Average"
+        ws.Range("G3").Value = "Instances"
+
+        ' Step 5: Add filters to headers in columns A to D only
+        ws.Range("A1:D" & lastRow).AutoFilter
+        
+        ' Step 6: Apply conditional formatting
+        For Each cell In compColumn
+            If cell.Value < 70 Then
+                cell.EntireRow.Interior.Color = RGB(255, 255, 0) ' Yellow color
+            ElseIf cell.Value >= 70 And cell.Value <= 90 Then
+                cell.EntireRow.Interior.Color = RGB(255, 165, 0) ' Orange color
+            End If
+        Next cell
+    Else
+        MsgBox "The 'Compliance' column was not found.", vbExclamation
+    End If
+End Sub
