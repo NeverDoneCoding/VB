@@ -8,6 +8,7 @@ Sub Avgfromtemplate()
     Dim cell As Range
     Dim ruleRoleCell As Range
     Dim lastCol As Long
+    Dim startCol As Long
 
     ' Set the worksheet to the currently active worksheet
     Set ws = ActiveSheet
@@ -56,13 +57,14 @@ Sub Avgfromtemplate()
         ' Step 5: Add filters to headers in columns A to D only
         ws.Range("A1:D" & lastRow).AutoFilter
         
-        ' Step 6: Apply conditional formatting to cells from "Compliance" column to last column with data
+        ' Step 6: Apply conditional formatting from column A to the "Compliance" column
+        startCol = 1 ' Starting column (A)
         For i = 2 To lastRow ' Loop through each row
-            lastCol = ws.Cells(i, ws.Columns.Count).End(xlToLeft).Column ' Find the last column with data in the row
+            lastCol = ws.Cells(i, foundCell.Column).End(xlToLeft).Column ' Find the last column with data before "Compliance"
             If ws.Cells(i, foundCell.Column).Value < 70 Then
-                ws.Range(ws.Cells(i, foundCell.Column), ws.Cells(i, lastCol)).Interior.Color = RGB(255, 255, 0) ' Yellow color
+                ws.Range(ws.Cells(i, startCol), ws.Cells(i, foundCell.Column)).Interior.Color = RGB(255, 255, 0) ' Yellow color
             ElseIf ws.Cells(i, foundCell.Column).Value >= 70 And ws.Cells(i, foundCell.Column).Value <= 90 Then
-                ws.Range(ws.Cells(i, foundCell.Column), ws.Cells(i, lastCol)).Interior.Color = RGB(255, 165, 0) ' Orange color
+                ws.Range(ws.Cells(i, startCol), ws.Cells(i, foundCell.Column)).Interior.Color = RGB(255, 165, 0) ' Orange color
             End If
         Next i
     Else
