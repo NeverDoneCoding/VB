@@ -7,7 +7,8 @@ Sub Avgfromtemplate()
     Dim foundCell As Range
     Dim cell As Range
     Dim ruleRoleCell As Range
-    
+    Dim lastCol As Long
+
     ' Set the worksheet to the currently active worksheet
     Set ws = ActiveSheet
     
@@ -55,14 +56,15 @@ Sub Avgfromtemplate()
         ' Step 5: Add filters to headers in columns A to D only
         ws.Range("A1:D" & lastRow).AutoFilter
         
-        ' Step 6: Apply conditional formatting
-        For Each cell In compColumn
-            If cell.Value < 70 Then
-                cell.EntireRow.Interior.Color = RGB(255, 255, 0) ' Yellow color
-            ElseIf cell.Value >= 70 And cell.Value <= 90 Then
-                cell.EntireRow.Interior.Color = RGB(255, 165, 0) ' Orange color
+        ' Step 6: Apply conditional formatting to cells from "Compliance" column to last column with data
+        For i = 2 To lastRow ' Loop through each row
+            lastCol = ws.Cells(i, ws.Columns.Count).End(xlToLeft).Column ' Find the last column with data in the row
+            If ws.Cells(i, foundCell.Column).Value < 70 Then
+                ws.Range(ws.Cells(i, foundCell.Column), ws.Cells(i, lastCol)).Interior.Color = RGB(255, 255, 0) ' Yellow color
+            ElseIf ws.Cells(i, foundCell.Column).Value >= 70 And ws.Cells(i, foundCell.Column).Value <= 90 Then
+                ws.Range(ws.Cells(i, foundCell.Column), ws.Cells(i, lastCol)).Interior.Color = RGB(255, 165, 0) ' Orange color
             End If
-        Next cell
+        Next i
     Else
         MsgBox "The 'Compliance' column was not found.", vbExclamation
     End If
