@@ -1,1 +1,17 @@
-h
+Meeting Notes:
+
+MFA Hardware (1.6):
+Confirm whether a permanent exception is needed - Paul.
+
+Remediation (1.12 - 1.14):
+Proceed with remediation once access is granted; expected completion timeline is 2-3 days - Parag.
+
+Coordination (3.5):
+Coordinate with Aneri's team - [Responsible Person].
+
+Expired Exception (5.0):
+Check for any expired exceptions with Carlos - Priya/Ashwin.
+
+AWS Security Hub Tagging (4.16):
+Tag the subscriptions for AWS Security Hub - Paul.
+
